@@ -16,10 +16,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    camera.cpp
+    camera.cpp \
+    picproc.cpp
 
 HEADERS += \
-    camera.h
+    camera.h \
+    picproc.h \
+    const_global.h
 
 INCLUDEPATH += /usr/include
 INCLUDEPATH += /usr/local/include
