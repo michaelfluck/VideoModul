@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core
-
+QT       += xml
 QT       -= gui
 
 TARGET = VideoModul
@@ -17,12 +17,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     camera.cpp \
-    picproc.cpp
+    picproc.cpp \
+    dataaquisition.cpp \
+    xmlreader.cpp
 
 HEADERS += \
     camera.h \
     picproc.h \
-    const_global.h
+    const_global.h \
+    dataaquisition.h \
+    xmlreader.h
 
 INCLUDEPATH += /usr/include
 INCLUDEPATH += /usr/local/include

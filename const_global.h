@@ -11,4 +11,13 @@ const std::string pictureProcDestination    =       "/home/pi/Desktop/Proc/";
 
 const std::string textToAdd                 =       "Hallo Welt";
 
+const std::string configXML                 =       "/var/www/html/config/config.xml";
+
+enum States {
+    INIT,
+    ENGAGE,
+    SHUTDOWN,
+    WAIT
+};
+
 #endif // CONST_GLOBAL_H

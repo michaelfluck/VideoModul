@@ -1,24 +1,61 @@
+#include <QCoreApplication>
+#include <QDebug>
 #include <iostream>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
+
 #include "camera.h"
+#include "dataaquisition.h"
 #include "picproc.h"
+#include "const_global.h"
+#include "xmlreader.h"
 
 using namespace std;
 
-int main()
+void init()
 {
-    cout << "VideoModul läuft..." << endl;
-
     Camera cam;
-    for (int i = 0; i < 20; ++i)
-    {
-        cam.getPicture();
-        sleep(1);
+
+}
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    cout << "VideoModul" << endl;
+    States s = INIT;
+    DataAquisition dataaq;
+    xmlReader xmlreader;
+
+
+    while(1){
+        switch(s){
+                case INIT:
+                    cout << "Initialisiere" << endl;
+                    init();
+
+                    s = WAIT;
+                    break;
+
+                case ENGAGE:
+
+                    dataaq.start();
+                    bool status;
+                    status = xmlreader.getStatus();
+                    cout << status << endl;
+                    s = WAIT;
+                    break;
+
+                case SHUTDOWN:
+                    cout << "Shutdown" << endl;
+                    break;
+
+                case WAIT:
+                    //cout << "Wait" << endl;
+                    s = WAIT;
+                    break;
+
+                default:
+                    cout << "Default Case!" << endl;
+                    break;
+        }
     }
-    cout << "Bilder fertig" << endl;
-    procPictures();
-    cout << "Bilder kopiert" << endl;
-    return 0;
+    return app.exec();
 }
