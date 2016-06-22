@@ -2,6 +2,8 @@
 #define CONST_GLOBAL_H
 
 #include <string>
+#include <QString>
+
 
 
 const std::string pictureName               =       "images";
@@ -11,7 +13,8 @@ const std::string pictureProcDestination    =       "/home/pi/Desktop/Proc/";
 
 const std::string textToAdd                 =       "Hallo Welt";
 
-const std::string configXML                 =       "/var/www/html/config/config.xml";
+const QString configXML                     =       "/var/www/html/config/config.xml";
+const QString onoffXML                      =       "/var/www/html/config/onoff.xml";
 
 enum States {
     INIT,

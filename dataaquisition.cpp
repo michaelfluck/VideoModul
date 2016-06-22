@@ -3,6 +3,7 @@
 
 DataAquisition::DataAquisition()
 {
+    qDebug() << "DataAquisition GO";
 }
 
 void DataAquisition::run()

@@ -1,4 +1,5 @@
 #include "camera.h"
+#include <QDebug>
 
 
 using namespace cv;
@@ -6,6 +7,7 @@ using namespace std;
 
 Camera::Camera()
 {
+    qDebug() << "Camera GO";
     cam_enable = cam_camera.isOpened();
     cam_pictureNr = 0;
     initCam();

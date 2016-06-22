@@ -10,37 +10,37 @@
 
 using namespace std;
 
-void init()
-{
-    Camera cam;
 
-}
+DataAquisition dataaq;
+xmlReader xmlreader;
+
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     cout << "VideoModul" << endl;
+    bool videostatus = 0;
     States s = INIT;
-    DataAquisition dataaq;
-    xmlReader xmlreader;
 
+    dataaq.start();
 
     while(1){
         switch(s){
                 case INIT:
                     cout << "Initialisiere" << endl;
-                    init();
-
-                    s = WAIT;
+                    s = ENGAGE;
                     break;
 
                 case ENGAGE:
-
-                    dataaq.start();
-                    bool status;
-                    status = xmlreader.getStatus();
-                    cout << status << endl;
-                    s = WAIT;
+                    videostatus = xmlreader.getStatus();
+                    qDebug() << videostatus;
+                    if(videostatus == 1)
+                    {
+                        qDebug() << "Aufnahme läuft";
+                        s = ENGAGE;
+                    }else{
+                        s = WAIT;
+                    }
                     break;
 
                 case SHUTDOWN:
