@@ -1,6 +1,5 @@
 #include "picproc.h"
 #include "const_global.h"
-
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -8,6 +7,7 @@
 #include <string>
 #include <iomanip>
 #include <ctime>
+
 
 using namespace cv;
 using namespace std;
@@ -17,7 +17,7 @@ int procPictures()
     Mat picture;
     string src, dest;
     VideoWriter outputVideo;
-    outputVideo.open("/home/pi/Desktop/test.avi",CV_FOURCC_DEFAULT,1,Size(800,600),true);
+    outputVideo.open(videoPath,CV_FOURCC_DEFAULT,1,Size(800,600),true);
 
     for (int i = 0; i < 20; i++)
     {
@@ -39,8 +39,8 @@ int procPictures()
 
 
         //Bilder speichern
-        dest =  pictureProcDestination + pictureName + number.str() + pictureExtension;
-        imwrite(dest, picture);
+        //dest =  pictureProcDestination + pictureName + number.str() + pictureExtension;
+        //imwrite(dest, picture);
     }
     outputVideo.release();
     return 0;
@@ -60,12 +60,16 @@ Mat turnPicture(Mat srcPicture, double angle)
 Mat addText(Mat srcPicture)
 {
     Mat textedPicture;
-    Point orgText(50, 500);
-    Point orgDate(100, 100);
+    Point orgTextLeft(10, 580);
+    Point orgTextMiddle(350, 580);
+    Point orgTextRight(600, 580);
+    Point orgDate(10, 25);
     Scalar color = Scalar(0,0,255);
     //Text einfügen
-    putText(srcPicture,textToAdd,orgText,FONT_HERSHEY_SIMPLEX,3,color,4,8);
+    putText(srcPicture,"Operator:" + textToAddOperator,orgTextLeft,FONT_HERSHEY_SIMPLEX,1,color,2,8);
+    putText(srcPicture,"Ort:" + textToAddDestination,orgTextMiddle,FONT_HERSHEY_SIMPLEX,1,color,2,8);
+    putText(srcPicture,"T:" + textToAddFree,orgTextRight,FONT_HERSHEY_SIMPLEX,1,color,2,8);
     // Datum einfügen
-    putText(srcPicture,"20.06.2016",orgDate,FONT_HERSHEY_SIMPLEX,1,color,4,8);
+    putText(srcPicture,textToAddDate,orgDate,FONT_HERSHEY_SIMPLEX,1,color,2,8);
     return textedPicture;
 }

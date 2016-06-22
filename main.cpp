@@ -19,41 +19,51 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     cout << "VideoModul" << endl;
-    bool videostatus = 0;
     States s = INIT;
-
-    dataaq.start();
 
     while(1){
         switch(s){
                 case INIT:
-                    cout << "Initialisiere" << endl;
-                    s = ENGAGE;
+                    qDebug() << "STATUS -> INIT";
+                    s = WAIT;
                     break;
 
                 case ENGAGE:
-                    videostatus = xmlreader.getStatus();
-                    qDebug() << videostatus;
-                    if(videostatus == 1)
+                    qDebug() << "STATUS -> ENGAGE";
+                    if(xmlreader.getStatus() == true)
                     {
-                        qDebug() << "Aufnahme läuft";
+                        if(dataaq.getStatus() == true)
+                        {
+
+                        }else{
+                            dataaq.start(QThread::HighestPriority);
+                        }
+                        s = ENGAGE;
+                    }else{
+                        dataaq.quit();
+                        dataaq.wait(1000);
+                        qDebug() << "DoVideo start";
+                        dataaq.doVideo();
+                        s = WAIT;
+                    }
+                    break;
+
+                case SHUTDOWN:
+                    qDebug() << "STATUS -> SHUTDOWN";
+                    break;
+
+                case WAIT:
+                    qDebug() << "STATUS -> WAIT";
+                    if(xmlreader.getStatus() == true)
+                    {
                         s = ENGAGE;
                     }else{
                         s = WAIT;
                     }
                     break;
 
-                case SHUTDOWN:
-                    cout << "Shutdown" << endl;
-                    break;
-
-                case WAIT:
-                    //cout << "Wait" << endl;
-                    s = WAIT;
-                    break;
-
                 default:
-                    cout << "Default Case!" << endl;
+                    qDebug() << "STATUS -> DEFAULT";
                     break;
         }
     }

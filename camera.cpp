@@ -8,7 +8,6 @@ using namespace std;
 Camera::Camera()
 {
     qDebug() << "Camera GO";
-    cam_enable = cam_camera.isOpened();
     cam_pictureNr = 0;
     initCam();
 }
@@ -18,6 +17,11 @@ Camera::~Camera()
 
 }
 
+bool Camera::getStatus()
+{
+    return cam_camera.isOpened();
+}
+
 
 void Camera::getPicture()
 {
@@ -25,6 +29,7 @@ void Camera::getPicture()
     cam_camera.grab();
     cam_camera.retrieve(cam_picture);
     cam_camera.release();
+
 
     // Get Picture Number ready for String
     ostringstream number;

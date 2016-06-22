@@ -17,10 +17,10 @@ public:
     ~Camera();
     void getPicture();
     void initCam();
+    bool getStatus();
 
 private:
     raspicam::RaspiCam_Cv       cam_camera;
-    bool                        cam_enable;
     cv::Mat                     cam_picture;
     int                         cam_pictureNr;
 

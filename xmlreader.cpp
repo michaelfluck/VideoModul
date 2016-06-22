@@ -62,4 +62,5 @@ bool xmlReader::getStatus()
             reader.readNext();
         }
     }
+    return false;
   }
