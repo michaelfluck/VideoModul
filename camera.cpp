@@ -45,4 +45,6 @@ void Camera::initCam()
     cam_camera.set(CV_CAP_PROP_FORMAT,CV_8UC3);
     cam_camera.set(CV_CAP_PROP_FRAME_HEIGHT,600);
     cam_camera.set(CV_CAP_PROP_FRAME_WIDTH,800);
+    cam_camera.set(CV_CAP_PROP_EXPOSURE,100);
+    cam_camera.set(CV_CAP_PROP_GAIN,100);
 }

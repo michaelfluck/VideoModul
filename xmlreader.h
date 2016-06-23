@@ -10,10 +10,11 @@ public:
     xmlReader();
     ~xmlReader();
     bool getStatus();
+    void getConfig();
 private:
     QFile file;
     QXmlStreamReader reader;
-    QString filename;
+
 };
 
 #endif // XMLREADER_H

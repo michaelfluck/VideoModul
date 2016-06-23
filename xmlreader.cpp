@@ -63,4 +63,46 @@ bool xmlReader::getStatus()
         }
     }
     return false;
-  }
+}
+
+void xmlReader::getConfig()
+{
+    QXmlStreamReader reader;
+    QFile file(configXML);
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "Error at reading XML-File";
+    }
+
+    reader.setDevice(&file);
+    reader.readNext();
+    while(!reader.atEnd())
+    {
+        if(reader.isStartElement())
+        {
+            if(reader.name() == "Config")
+            {
+                reader.readNext();
+            }
+            else if(reader.name() == "Aufloesung")
+            {
+                while(!reader.atEnd())
+                {
+                    QString aufloesung = reader.readElementText();
+                    if(reader.isEndElement())
+                    {
+                        reader.readNext();
+                        break;
+                    }
+                    else if(reader.isCharacters())
+                    {
+                        reader.readNext();
+                    }
+                }
+                break;
+            }
+        }else{
+            reader.readNext();
+        }
+    }
+}

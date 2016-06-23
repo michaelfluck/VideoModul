@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
                         s = ENGAGE;
                     }else{
                         dataaq.quit();
-                        dataaq.wait(1000);
+                        dataaq.wait(2000);
                         qDebug() << "DoVideo start";
                         dataaq.doVideo();
                         s = WAIT;

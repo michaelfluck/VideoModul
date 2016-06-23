@@ -3,6 +3,8 @@
 #include <QDebug>
 
 
+
+
 DataAquisition::DataAquisition()
 {
     qDebug() << "DataAquisition GO";
@@ -17,7 +19,10 @@ DataAquisition::~DataAquisition()
 void DataAquisition::run()
 {
     qDebug() << "DataAquisition läuft..";
+    sleep(1);
     cam.getPicture();
+    while(cam.getStatus()==true)
+    {}
 }
 
 bool DataAquisition::getStatus()

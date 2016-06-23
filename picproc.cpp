@@ -6,7 +6,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <string>
 #include <iomanip>
-#include <ctime>
+#include <QDir>
+
 
 
 using namespace cv;
@@ -43,6 +44,14 @@ int procPictures()
         //imwrite(dest, picture);
     }
     outputVideo.release();
+    // Alle Bilder löschen
+
+    QDir dir(pictureDestination);
+    foreach(QString dirFile, dir.entryList())
+    {
+        dir.remove(dirFile);
+    }
+
     return 0;
 
 }

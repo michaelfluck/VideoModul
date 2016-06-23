@@ -9,6 +9,7 @@
 const std::string pictureName               =       "images";
 const std::string pictureExtension          =       ".jpg";
 const std::string pictureSaveDestination    =       "/home/pi/Desktop/Testbilder/";
+const QString pictureDestination             =      "/home/pi/Desktop/Testbilder/";
 const std::string pictureProcDestination    =       "/home/pi/Desktop/Proc/";
 const std::string videoPath                 =       "/var/www/html/video/Film.avi";
 
