@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <iostream>
+#include <QString>
 
 #include "camera.h"
 #include "dataaquisition.h"
@@ -41,7 +42,7 @@ int main(int argc, char *argv[])
                         s = ENGAGE;
                     }else{
                         dataaq.quit();
-                        dataaq.wait(2000);
+                        dataaq.wait(1000);
                         qDebug() << "DoVideo start";
                         dataaq.doVideo();
                         s = WAIT;

@@ -10,10 +10,15 @@ public:
     xmlReader();
     ~xmlReader();
     bool getStatus();
-    void getConfig();
+    QString getAufloesung();
+    QString getFPS();
+    QString getOperator();
+    QString getOrt();
+    QString getFreitext();
 private:
     QFile file;
     QXmlStreamReader reader;
+    QString readElement;
 
 };
 

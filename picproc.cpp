@@ -1,4 +1,5 @@
 #include "picproc.h"
+#include "xmlreader.h"
 #include "const_global.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
@@ -7,6 +8,8 @@
 #include <string>
 #include <iomanip>
 #include <QDir>
+#include <QString>
+#include <QDate>
 
 
 
@@ -30,7 +33,7 @@ int procPictures()
         picture = imread(src, CV_LOAD_IMAGE_COLOR);
 
         //Drehen
-        picture = turnPicture(picture, 180);
+        //picture = turnPicture(picture, 180);
 
         //Text hinzufügen
         addText(picture);
@@ -68,17 +71,30 @@ Mat turnPicture(Mat srcPicture, double angle)
 
 Mat addText(Mat srcPicture)
 {
+    xmlReader xmlreader;
     Mat textedPicture;
     Point orgTextLeft(10, 580);
     Point orgTextMiddle(350, 580);
     Point orgTextRight(600, 580);
     Point orgDate(10, 25);
     Scalar color = Scalar(0,0,255);
+
+    //QStrings aus XML auslesen und umwandeln
+    QString qoperator = xmlreader.getOperator();
+    std::string op = qoperator.toAscii().constData();
+    QString qort = xmlreader.getOrt();
+    std::string ort = qort.toAscii().constData();
+    QString qfreitext = xmlreader.getFreitext();
+    std::string freitext = qfreitext.toAscii().constData();
+    QDate date = QDate::currentDate();
+    QString qdate = date.toString("dd/MM/yyyy");
+    std::string datum = qdate.toAscii().constData();
+
     //Text einfügen
-    putText(srcPicture,"Operator:" + textToAddOperator,orgTextLeft,FONT_HERSHEY_SIMPLEX,1,color,2,8);
-    putText(srcPicture,"Ort:" + textToAddDestination,orgTextMiddle,FONT_HERSHEY_SIMPLEX,1,color,2,8);
-    putText(srcPicture,"T:" + textToAddFree,orgTextRight,FONT_HERSHEY_SIMPLEX,1,color,2,8);
+    putText(srcPicture,"Operator:" + op ,orgTextLeft,FONT_HERSHEY_SIMPLEX,1,color,2,8);
+    putText(srcPicture,"Ort:" + ort,orgTextMiddle,FONT_HERSHEY_SIMPLEX,1,color,2,8);
+    putText(srcPicture,"T:" + freitext,orgTextRight,FONT_HERSHEY_SIMPLEX,1,color,2,8);
     // Datum einfügen
-    putText(srcPicture,textToAddDate,orgDate,FONT_HERSHEY_SIMPLEX,1,color,2,8);
+    putText(srcPicture,datum,orgDate,FONT_HERSHEY_SIMPLEX,1,color,2,8);
     return textedPicture;
 }
