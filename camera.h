@@ -9,6 +9,7 @@
 #include <raspicam/raspicam_cv.h>
 
 #include "const_global.h"
+#include "gpio.h"
 
 class Camera
 {

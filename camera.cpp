@@ -1,6 +1,4 @@
 #include "camera.h"
-#include <QDebug>
-
 
 using namespace cv;
 using namespace std;
@@ -25,11 +23,12 @@ bool Camera::getStatus()
 
 void Camera::getPicture()
 {
+    setLEDsOn();
     cam_camera.open();
     cam_camera.grab();
     cam_camera.retrieve(cam_picture);
     cam_camera.release();
-
+    setLEDsOff();
 
     // Get Picture Number ready for String
     ostringstream number;

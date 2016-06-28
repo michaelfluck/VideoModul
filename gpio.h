@@ -7,3 +7,6 @@
 void gpioInit();
 int getAngle();
 int getOnOff();
+int getVideoOnOff();
+void setLEDsOn();
+void setLEDsOff();

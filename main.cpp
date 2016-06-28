@@ -26,14 +26,14 @@ int main(int argc, char *argv[])
     while(1){
         switch(s){
                 case INIT:
+                    qDebug() << "STATUS -> INIT";
                     gpioInit();
-                    //qDebug() << "STATUS -> INIT";
                     s = WAIT;
                     break;
 
                 case ENGAGE:
                     //qDebug() << "STATUS -> ENGAGE";
-                    if(xmlreader.getStatus() == true)
+                    if((xmlreader.getStatus() == true) || (getVideoOnOff() == true))
                     {
                         if(dataaq.getStatus() == true)
                         {
@@ -54,17 +54,21 @@ int main(int argc, char *argv[])
 
                 case SHUTDOWN:
                     qDebug() << "STATUS -> SHUTDOWN";
+                    system("sudo shutdown now");
                     break;
 
                 case WAIT:
                     //qDebug() << "STATUS -> WAIT";
-                    if(xmlreader.getStatus() == true)
+                    if((xmlreader.getStatus() == true) || (getVideoOnOff() == true))
                     {
                         s = ENGAGE;
-                    }else{
-                        qDebug() << getAngle();
+                    }else if(getOnOff() == true){
+                        s = SHUTDOWN;
+                    }else
+                    {
                         s = WAIT;
                     }
+
                     break;
 
                 default:

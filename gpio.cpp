@@ -5,14 +5,32 @@ void gpioInit()
     if(gpioInitialise() == -1)
         qDebug() << "GPIO Init Fehler";
 
+    //Input AtTiny13A
+    gpioSetMode(5, PI_INPUT);           //VideoSwitch
+    gpioSetMode(6, PI_INPUT);           //Shutdown
 
-    //GPIO Init
-    gpioSetMode(7, PI_OUTPUT);          // Status LED
-    gpioSetMode(8,PI_OUTPUT);           // LED_Enable_2
+    //Akku Anzeige
+    gpioSetMode(7, PI_OUTPUT);
+    gpioSetMode(12, PI_OUTPUT);
+    gpioSetMode(16, PI_OUTPUT);
+    gpioSetMode(20, PI_OUTPUT);
+    gpioSetMode(21, PI_OUTPUT);
+    gpioWrite(7,0);
+    gpioWrite(12,0);
+    gpioWrite(16,0);
+    gpioWrite(20,0);
+    gpioWrite(21,0);
+
+    // i2C
     gpioSetMode(13,PI_OUTPUT);          // MMA8491_EN
-
-    gpioWrite(8,0);                     // Beleuchtung = 0
     gpioWrite(13,0);                    // MMA8491_EN = 0
+
+    // Beleuchtung
+    gpioSetMode(8,PI_OUTPUT);           // LED_Enable_2
+    gpioWrite(8,0);                     // Beleuchtung = 0
+    gpioSetMode(25,PI_OUTPUT);          // LED_Enable_2
+    gpioWrite(25,0);                    // Beleuchtung = 0
+
 }
 
 int getAngle()
@@ -40,10 +58,7 @@ int getAngle()
      double dataX_ABS = 0;
      double dataZ_ABS = 0;
 
-    gpioInit();
-
-
-     //i2c
+      //i2c
 
          i2cSwitchCombined(1);               // WICHTIG! Enable "Repeated Start"!!
 
@@ -111,6 +126,22 @@ int getAngle()
 
 int getOnOff()
 {
+    return gpioRead(6);
+}
 
+int getVideoOnOff()
+{
     return gpioRead(5);
+}
+
+void setLEDsOn()
+{
+    gpioWrite(8,1);
+    gpioWrite(25,1);
+}
+
+void setLEDsOff()
+{
+    gpioWrite(8,0);
+    gpioWrite(25,0);
 }
