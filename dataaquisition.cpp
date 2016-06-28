@@ -13,12 +13,12 @@ DataAquisition::DataAquisition()
 
 DataAquisition::~DataAquisition()
 {
-
+    qDebug() << "DataAquisition STOPP";
 }
 
 void DataAquisition::run()
 {
-    qDebug() << "DataAquisition läuft..";
+    qDebug() << "Bild aufnehmen...";
     sleep(1);
     cam.getPicture();
     while(cam.getStatus()==true)
@@ -32,5 +32,6 @@ bool DataAquisition::getStatus()
 
 void DataAquisition::doVideo()
 {
-    procPictures();
+    qDebug() << cam.getPictureNr();
+    procPictures(cam.getPictureNr());
 }

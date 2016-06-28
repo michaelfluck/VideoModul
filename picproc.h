@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <ctime>
 
-int procPictures();
+int procPictures(int pictureNr);
+void readTextToAdd();
 cv::Mat turnPicture(cv::Mat srcPicture, double angle);
 cv::Mat addText(cv::Mat srcPicture);

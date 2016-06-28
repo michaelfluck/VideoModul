@@ -14,7 +14,7 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-
+    qDebug() << "Camera STOPP";
 }
 
 bool Camera::getStatus()
@@ -47,4 +47,9 @@ void Camera::initCam()
     cam_camera.set(CV_CAP_PROP_FRAME_WIDTH,800);
     cam_camera.set(CV_CAP_PROP_EXPOSURE,100);
     cam_camera.set(CV_CAP_PROP_GAIN,100);
+}
+
+int Camera::getPictureNr()
+{
+    return cam_pictureNr;
 }

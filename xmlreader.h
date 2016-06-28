@@ -13,8 +13,9 @@ public:
     QString getAufloesung();
     QString getFPS();
     QString getOperator();
-    QString getOrt();
-    QString getFreitext();
+    QString getStart();
+    QString getZiel();
+    QString getDatum();
 private:
     QFile file;
     QXmlStreamReader reader;

@@ -293,7 +293,7 @@ QString xmlReader::getOperator()
     file.close();
 }
 
-QString xmlReader::getOrt()
+QString xmlReader::getZiel()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -312,7 +312,7 @@ QString xmlReader::getOrt()
             {
                 reader.readNext();
             }
-            else if(reader.name() == "Ort")
+            else if(reader.name() == "Ziel")
             {
                 while(!reader.atEnd())
                 {
@@ -327,7 +327,7 @@ QString xmlReader::getOrt()
                     }
                     else if(reader.isStartElement())
                     {
-                        if(reader.name() == "Ort")
+                        if(reader.name() == "Ziel")
                         {
                             while(!reader.atEnd())
                             {
@@ -369,7 +369,7 @@ QString xmlReader::getOrt()
     file.close();
 }
 
-QString xmlReader::getFreitext()
+QString xmlReader::getStart()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -388,7 +388,7 @@ QString xmlReader::getFreitext()
             {
                 reader.readNext();
             }
-            else if(reader.name() == "Freitext")
+            else if(reader.name() == "Start")
             {
                 while(!reader.atEnd())
                 {
@@ -403,7 +403,83 @@ QString xmlReader::getFreitext()
                     }
                     else if(reader.isStartElement())
                     {
-                        if(reader.name() == "Freitext")
+                        if(reader.name() == "Start")
+                        {
+                            while(!reader.atEnd())
+                            {
+                                if(reader.isEndElement())
+                                {
+                                    reader.readNext();
+                                    break;
+                                }
+                                else if(reader.isStartElement())
+                                {
+                                    return reader.readElementText();
+                                    reader.readNext();
+                                    break;
+                                }
+                                else if(reader.isCharacters())
+                                {
+                                    reader.readNext();
+                                }
+                                else
+                                {
+                                    reader.readNext();
+                                }
+                            }
+                        }
+                        reader.readNext();
+                    }
+                }
+            }
+            else
+            {
+                reader.readNext();
+            }
+        }
+        else
+        {
+            reader.readNext();
+        }
+    }
+    file.close();
+}
+
+QString xmlReader::getDatum()
+{
+    QXmlStreamReader reader;
+    QFile file(configXML);
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "Error at reading XML-File" + configXML;
+    }
+
+    reader.setDevice(&file);
+    reader.readNext();
+    while(!reader.atEnd())
+    {
+        if(reader.isStartElement())
+        {
+            if(reader.name() == "Config")
+            {
+                reader.readNext();
+            }
+            else if(reader.name() == "Date")
+            {
+                while(!reader.atEnd())
+                {
+                    if(reader.isEndElement())
+                    {
+                        reader.readNext();
+                        break;
+                    }
+                    else if(reader.isCharacters())
+                    {
+                        reader.readNext();
+                    }
+                    else if(reader.isStartElement())
+                    {
+                        if(reader.name() == "Date")
                         {
                             while(!reader.atEnd())
                             {

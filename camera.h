@@ -18,6 +18,7 @@ public:
     void getPicture();
     void initCam();
     bool getStatus();
+    int getPictureNr();
 
 private:
     raspicam::RaspiCam_Cv       cam_camera;
