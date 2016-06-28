@@ -3,8 +3,6 @@
 #include <QDebug>
 
 
-
-
 DataAquisition::DataAquisition()
 {
     qDebug() << "DataAquisition GO";

@@ -33,7 +33,7 @@ int procPictures(int pictureNr)
         //Bilder einlesen
 
         src = pictureSaveDestination + pictureName + number.str() + pictureExtension;
-        qDebug() << QString::fromLocal8Bit(src.c_str());
+        //qDebug() << QString::fromLocal8Bit(src.c_str());
         picture = imread(src, CV_LOAD_IMAGE_COLOR);
 
         //Drehen

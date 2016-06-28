@@ -19,14 +19,16 @@ SOURCES += main.cpp \
     camera.cpp \
     picproc.cpp \
     dataaquisition.cpp \
-    xmlreader.cpp
+    xmlreader.cpp \
+    gpio.cpp
 
 HEADERS += \
     camera.h \
     picproc.h \
     const_global.h \
     dataaquisition.h \
-    xmlreader.h
+    xmlreader.h \
+    gpio.h
 
 INCLUDEPATH += /usr/include
 INCLUDEPATH += /usr/local/include
@@ -43,3 +45,8 @@ LIBS += -lopencv_core \
     -lopencv_video \
     -lraspicam \
     -lraspicam_cv
+
+unix:!macx: LIBS += -L$$PWD/../../../../usr/local/lib/ -lpigpio
+
+INCLUDEPATH += $$PWD/../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../usr/local/include

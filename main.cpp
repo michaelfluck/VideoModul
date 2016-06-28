@@ -4,6 +4,7 @@
 #include <QString>
 
 #include "camera.h"
+#include "gpio.h"
 #include "dataaquisition.h"
 #include "picproc.h"
 #include "const_global.h"
@@ -25,6 +26,7 @@ int main(int argc, char *argv[])
     while(1){
         switch(s){
                 case INIT:
+                    gpioInit();
                     //qDebug() << "STATUS -> INIT";
                     s = WAIT;
                     break;
@@ -60,6 +62,7 @@ int main(int argc, char *argv[])
                     {
                         s = ENGAGE;
                     }else{
+                        qDebug() << getAngle();
                         s = WAIT;
                     }
                     break;

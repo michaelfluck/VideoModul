@@ -1,10 +1,13 @@
+#include <string>
+
 #include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <string>
-#include <iomanip>
-#include <ctime>
+
+#include <QDir>
+
+#include "xmlreader.h"
+#include "const_global.h"
 
 int procPictures(int pictureNr);
 void readTextToAdd();
