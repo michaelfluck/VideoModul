@@ -10,8 +10,8 @@ public:
     xmlReader();
     ~xmlReader();
     bool getStatus();
-    QString getAufloesung();
-    QString getFPS();
+    int getResolution();
+    int getFPS();
     QString getOperator();
     QString getStart();
     QString getZiel();

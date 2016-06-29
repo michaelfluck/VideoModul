@@ -15,20 +15,20 @@ void gpioInit()
     gpioSetMode(16, PI_OUTPUT);
     gpioSetMode(20, PI_OUTPUT);
     gpioSetMode(21, PI_OUTPUT);
-    gpioWrite(7,0);
-    gpioWrite(12,0);
-    gpioWrite(16,0);
-    gpioWrite(20,0);
-    gpioWrite(21,0);
+    gpioWrite(7,1);
+    gpioWrite(12,1);
+    gpioWrite(16,1);
+    gpioWrite(20,1);
+    gpioWrite(21,1);
 
     // i2C
     gpioSetMode(13,PI_OUTPUT);          // MMA8491_EN
     gpioWrite(13,0);                    // MMA8491_EN = 0
 
     // Beleuchtung
-    gpioSetMode(8,PI_OUTPUT);           // LED_Enable_2
-    gpioWrite(8,0);                     // Beleuchtung = 0
-    gpioSetMode(25,PI_OUTPUT);          // LED_Enable_2
+    gpioSetMode(23,PI_OUTPUT);           // LED_Enable_2
+    gpioWrite(23,0);                     // Beleuchtung = 0
+    gpioSetMode(25,PI_OUTPUT);          // LED_Enable_1
     gpioWrite(25,0);                    // Beleuchtung = 0
 
 }
@@ -136,12 +136,17 @@ int getVideoOnOff()
 
 void setLEDsOn()
 {
-    gpioWrite(8,1);
+    gpioWrite(23,1);
     gpioWrite(25,1);
 }
 
 void setLEDsOff()
 {
-    gpioWrite(8,0);
+    gpioWrite(23,0);
     gpioWrite(25,0);
+}
+
+void setFuelGauge(int fuel)
+{
+
 }

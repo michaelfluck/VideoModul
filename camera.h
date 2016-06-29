@@ -20,6 +20,7 @@ public:
     void initCam();
     bool getStatus();
     int getPictureNr();
+    void setResolution(int resolution);
 
 private:
     raspicam::RaspiCam_Cv       cam_camera;

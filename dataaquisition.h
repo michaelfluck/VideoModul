@@ -12,6 +12,7 @@ public:
     void run();
     bool getStatus();
     void doVideo();
+    void setConfig(int resolution, int fps);
 private:
     Camera cam;
 };

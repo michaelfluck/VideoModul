@@ -33,3 +33,8 @@ void DataAquisition::doVideo()
     qDebug() << cam.getPictureNr();
     procPictures(cam.getPictureNr());
 }
+
+void DataAquisition::setConfig(int resolution, int fps)
+{
+    cam.setResolution(resolution);
+}

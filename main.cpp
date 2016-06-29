@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     while(1){
         switch(s){
                 case INIT:
-                    qDebug() << "STATUS -> INIT";
+                    qDebug() << "STATUS -> INITI";
                     gpioInit();
                     s = WAIT;
                     break;
@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
                         {
 
                         }else{
+                            dataaq.setConfig(xmlreader.getResolution(), xmlreader.getFPS());
                             dataaq.start(QThread::HighestPriority);
                         }
                         s = ENGAGE;
