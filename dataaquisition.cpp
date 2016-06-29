@@ -11,16 +11,19 @@ DataAquisition::DataAquisition()
 
 DataAquisition::~DataAquisition()
 {
+    cam.closeCamera();
     qDebug() << "DataAquisition STOPP";
 }
 
 void DataAquisition::run()
 {
+    if(cam.getStatus == false)
+    {
+        cam.openCamera();
+    }
     qDebug() << "Bild aufnehmen...";
     sleep(1);
     cam.getPicture();
-    while(cam.getStatus()==true)
-    {}
 }
 
 bool DataAquisition::getStatus()
