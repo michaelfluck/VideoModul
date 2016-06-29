@@ -24,10 +24,10 @@ bool Camera::getStatus()
 void Camera::getPicture()
 {
     setLEDsOn();
-    cam_camera.open();
+    //cam_camera.open();
     cam_camera.grab();
     cam_camera.retrieve(cam_picture);
-    cam_camera.release();
+    //cam_camera.release();
     setLEDsOff();
 
     // Get Picture Number ready for String
@@ -41,11 +41,11 @@ void Camera::getPicture()
 
 void Camera::initCam()
 {
-    cam_camera.set(CV_CAP_PROP_FORMAT,CV_8UC3);
+    cam_camera.set(CV_CAP_PROP_FORMAT,CV_8UC1);
     cam_camera.set(CV_CAP_PROP_FRAME_HEIGHT,600);
     cam_camera.set(CV_CAP_PROP_FRAME_WIDTH,800);
-    cam_camera.set(CV_CAP_PROP_EXPOSURE,100);
-    cam_camera.set(CV_CAP_PROP_GAIN,100);
+    //cam_camera.set(CV_CAP_PROP_EXPOSURE,100);
+    //cam_camera.set(CV_CAP_PROP_GAIN,100);
 }
 
 void Camera::setResolution(int resolution)
@@ -72,4 +72,16 @@ int Camera::getPictureNr()
     int nr = cam_pictureNr;
     cam_pictureNr = 0;
     return nr;
+}
+
+int Camera::openCamera()
+{
+    qDebug() << "Opening Camera...";
+    cam_camera.open();
+}
+
+void Camera::closeCamera()
+{
+    qDebug() << "Close Camera...";
+    cam_camera.release();
 }
