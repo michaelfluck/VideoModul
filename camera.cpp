@@ -74,10 +74,13 @@ int Camera::getPictureNr()
     return nr;
 }
 
-int Camera::openCamera()
+void Camera::openCamera()
 {
     qDebug() << "Opening Camera...";
-    cam_camera.open();
+    if(!cam_camera.open())
+    {
+        qDebug() << "Error at Opening Camera...";
+    }
 }
 
 void Camera::closeCamera()
