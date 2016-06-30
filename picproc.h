@@ -5,6 +5,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include <QDir>
+#include <QDateTime>
 
 #include "xmlreader.h"
 #include "const_global.h"

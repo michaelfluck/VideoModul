@@ -2,7 +2,10 @@
 #define DATAAQUISITION_H
 
 #include <QThread>
+#include <QDebug>
 #include "camera.h"
+#include "picproc.h"
+
 
 class DataAquisition : public QThread
 {

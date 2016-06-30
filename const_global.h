@@ -16,7 +16,7 @@ const std::string pictureExtension          =       ".jpg";
 const std::string pictureSaveDestination    =       "/home/pi/Desktop/Testbilder/";
 const QString pictureDestination            =       "/home/pi/Desktop/Testbilder/";
 const std::string pictureProcDestination    =       "/home/pi/Desktop/Proc/";
-const std::string videoPath                 =       "/var/www/html/video/Film.avi";
+const std::string videoPath                 =       "/var/www/html/video/";
 
 const QString configXML                     =       "/var/www/html/config/config.xml";
 const QString onoffXML                      =       "/var/www/html/config/onoff.xml";

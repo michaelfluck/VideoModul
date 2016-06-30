@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
                     }else{
                         dataaq.quit();
                         dataaq.wait(1000);
-                        qDebug() << "Film wird erstellt";
+                        qDebug() << "Film wird erstellt...";
                         dataaq.doVideo();
                         qDebug() << "Film FERTIG";
                         s = WAIT;

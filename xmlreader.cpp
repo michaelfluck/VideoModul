@@ -1,10 +1,4 @@
-#include <QDebug>
-#include <iostream>
-
 #include "xmlreader.h"
-#include "const_global.h"
-
-
 
 xmlReader::xmlReader()
 {

@@ -1,29 +1,21 @@
 #include "dataaquisition.h"
-#include "picproc.h"
-#include <QDebug>
-
 
 DataAquisition::DataAquisition()
 {
     qDebug() << "DataAquisition GO";
-    Camera cam;
 }
 
 DataAquisition::~DataAquisition()
 {
-    cam.closeCamera();
+
     qDebug() << "DataAquisition STOPP";
 }
 
 void DataAquisition::run()
 {
-    if(cam.getStatus == false)
-    {
-        cam.openCamera();
-    }
-    qDebug() << "Bild aufnehmen...";
     sleep(1);
     cam.getPicture();
+    qDebug() << "Bilder aufnehmen...";
 }
 
 bool DataAquisition::getStatus()
@@ -35,6 +27,7 @@ void DataAquisition::doVideo()
 {
     qDebug() << cam.getPictureNr();
     procPictures(cam.getPictureNr());
+    cam.setPictureNrToZero();
 }
 
 void DataAquisition::setConfig(int resolution, int fps)

@@ -10,3 +10,4 @@ int getOnOff();
 int getVideoOnOff();
 void setLEDsOn();
 void setLEDsOff();
+void setFuelGauge();

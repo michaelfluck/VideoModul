@@ -1,13 +1,4 @@
 #include "picproc.h"
-#include "xmlreader.h"
-#include "const_global.h"
-
-#include <opencv2/opencv.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
-#include <iomanip>
-#include <QDir>
 
 using namespace cv;
 using namespace std;
@@ -22,8 +13,11 @@ int procPictures(int pictureNr)
     Mat picture;
     string src, dest;
     VideoWriter outputVideo;
+    QDateTime dateTime = QDateTime::currentDateTime();
+    string filmname = videoPath + "Film " + (dateTime.toString("dd-MM-yyyy hh:mm")).toAscii().constData() + ".avi";
     readTextToAdd();
-    outputVideo.open(videoPath,CV_FOURCC_DEFAULT,1,Size(800,600),true);
+
+    outputVideo.open(filmname,CV_FOURCC_DEFAULT,1,Size(800,600),true);
 
     for (int i = pictureNr - 1 ; i >= 0; i--)
     {

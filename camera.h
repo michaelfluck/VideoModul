@@ -21,8 +21,7 @@ public:
     bool getStatus();
     int getPictureNr();
     void setResolution(int resolution);
-    void openCamera();
-    void closeCamera();
+    void setPictureNrToZero();
 
 private:
     raspicam::RaspiCam_Cv       cam_camera;

@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QString>
 
+#include "const_global.h"
+
 class xmlReader
 {
 public:
