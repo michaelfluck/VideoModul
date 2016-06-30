@@ -9,6 +9,7 @@
 
 #include "xmlreader.h"
 #include "const_global.h"
+#include "gpio.h"
 
 int procPictures(int pictureNr);
 void readTextToAdd();

@@ -3,6 +3,7 @@
 DataAquisition::DataAquisition()
 {
     qDebug() << "DataAquisition GO";
+    camSpeed = 1.0;
 }
 
 DataAquisition::~DataAquisition()
@@ -13,9 +14,8 @@ DataAquisition::~DataAquisition()
 
 void DataAquisition::run()
 {
-    sleep(1);
+    sleep(camSpeed);
     cam.getPicture();
-    qDebug() << "Bilder aufnehmen...";
 }
 
 bool DataAquisition::getStatus()
@@ -30,7 +30,8 @@ void DataAquisition::doVideo()
     cam.setPictureNrToZero();
 }
 
-void DataAquisition::setConfig(int resolution, int fps)
+void DataAquisition::setConfig(int resolution, double fps)
 {
     cam.setResolution(resolution);
+    camSpeed = fps;
 }

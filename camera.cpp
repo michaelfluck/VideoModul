@@ -34,6 +34,10 @@ void Camera::getPicture()
     // Get Picture Number ready for String
     ostringstream number;
     number << cam_pictureNr;
+
+    //Bild drehen
+    cam_picture = turnPicture(cam_picture, getAngle());
+
     // Set Savepath and Naming for the Pictures
     string name = pictureSaveDestination + pictureName + number.str() + pictureExtension;
     imwrite(name, cam_picture);
@@ -76,4 +80,14 @@ int Camera::getPictureNr()
 void Camera::setPictureNrToZero()
 {
     cam_pictureNr = 0;
+}
+
+Mat Camera::turnPicture(Mat srcPicture, double angle)
+{
+    Mat turnedPicture;
+    Point2f pt(srcPicture.cols/2.,srcPicture.rows/2.);
+    Mat r = getRotationMatrix2D(pt, angle, 1);
+    warpAffine(srcPicture, turnedPicture, r, Size(srcPicture.cols, srcPicture.rows));
+
+    return turnedPicture;
 }

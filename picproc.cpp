@@ -3,10 +3,11 @@
 using namespace cv;
 using namespace std;
 
-std::string op;
-std::string start;
-std::string ziel;
-std::string datum;
+string op;
+string start;
+string ziel;
+string datum;
+int aufloesung;
 
 int procPictures(int pictureNr)
 {
@@ -14,10 +15,21 @@ int procPictures(int pictureNr)
     string src, dest;
     VideoWriter outputVideo;
     QDateTime dateTime = QDateTime::currentDateTime();
-    string filmname = videoPath + "Film " + (dateTime.toString("dd-MM-yyyy hh:mm")).toAscii().constData() + ".avi";
     readTextToAdd();
+    string filmname = videoPath + "Film " + (dateTime.toString("dd-MM-yyyy hh:mm")).toAscii().constData() + ".avi";
 
-    outputVideo.open(filmname,CV_FOURCC_DEFAULT,1,Size(800,600),true);
+    if(aufloesung == 1024)
+    {
+        outputVideo.open(filmname,CV_FOURCC_DEFAULT,1,Size(1024,768),true);
+    }
+    else if(aufloesung == 800)
+    {
+        outputVideo.open(filmname,CV_FOURCC_DEFAULT,1,Size(800,600),true);
+    }
+    else
+    {
+        outputVideo.open(filmname,CV_FOURCC_DEFAULT,1,Size(640,480),true);
+    }
 
     for (int i = pictureNr - 1 ; i >= 0; i--)
     {
@@ -25,13 +37,8 @@ int procPictures(int pictureNr)
         number << i;
 
         //Bilder einlesen
-
         src = pictureSaveDestination + pictureName + number.str() + pictureExtension;
-        //qDebug() << QString::fromLocal8Bit(src.c_str());
         picture = imread(src, CV_LOAD_IMAGE_COLOR);
-
-        //Drehen
-        //picture = turnPicture(picture, 180);
 
         //Text hinzufügen
         addText(picture);
@@ -44,6 +51,7 @@ int procPictures(int pictureNr)
         //imwrite(dest, picture);
     }
     outputVideo.release();
+
     // Alle Bilder löschen
     QDir dir(pictureDestination);
     foreach(QString dirFile, dir.entryList())
@@ -52,16 +60,6 @@ int procPictures(int pictureNr)
     }
     return 0;
 
-}
-
-Mat turnPicture(Mat srcPicture, double angle)
-{
-    Mat turnedPicture;
-    Point2f pt(srcPicture.cols/2.,srcPicture.rows/2.);
-    Mat r = getRotationMatrix2D(pt, angle, 1);
-    warpAffine(srcPicture, turnedPicture, r, Size(srcPicture.cols, srcPicture.rows));
-
-    return turnedPicture;
 }
 
 Mat addText(Mat srcPicture)
@@ -92,4 +90,9 @@ void readTextToAdd()
     ziel = qziel.toAscii().constData();
     QString qdatum = xmlreader.getDatum();
     datum = qdatum.toAscii().constData();
+
+    //Videoauflösung setzen
+    aufloesung = xmlreader.getResolution();
+
 }
+

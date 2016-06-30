@@ -62,6 +62,7 @@ bool xmlReader::getStatus()
 int xmlReader::getResolution()
 {
     QXmlStreamReader reader;
+    int resolutionW;
     QFile file(configXML);
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -104,7 +105,7 @@ int xmlReader::getResolution()
                                 }
                                 else if(reader.isStartElement())
                                 {
-                                    return reader.readElementText().toInt();
+                                    resolutionW = reader.readElementText().toInt();
                                     reader.readNext();
                                     break;
                                 }
@@ -133,9 +134,11 @@ int xmlReader::getResolution()
         }
     }
     file.close();
+    return resolutionW;
+
 }
 
-int xmlReader::getFPS()
+double xmlReader::getFPS()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -180,7 +183,7 @@ int xmlReader::getFPS()
                                 }
                                 else if(reader.isStartElement())
                                 {
-                                    return reader.readElementText().toInt();
+                                    return reader.readElementText().toDouble();
                                     reader.readNext();
                                     break;
                                 }

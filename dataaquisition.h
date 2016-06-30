@@ -15,9 +15,10 @@ public:
     void run();
     bool getStatus();
     void doVideo();
-    void setConfig(int resolution, int fps);
+    void setConfig(int resolution, double fps);
 private:
     Camera cam;
+    double camSpeed;
 };
 
 #endif // DATAAQUISITION_H

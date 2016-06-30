@@ -63,13 +63,13 @@ int getAngle()
          i2cSwitchCombined(1);               // WICHTIG! Enable "Repeated Start"!!
 
          gpioWrite(13,1);                    // MMA8491_EN = 1
-         gpioDelay(10000);                   // Ton (minimales Delay)
+         gpioDelay(1000);                   // Ton (minimales Delay)
          handle = i2cOpen(1,0x55,0);
 
          i2cWriteByte(handle,0x00);
          dataready = i2cReadByte(handle);
 
-         if((dataready & 0x08) == 0x08)      // Falls neue Daten VerfÃ¼gbar
+         if((dataready & 0x08) == 0x08)      // Falls neue Daten Verfügbar
          {
              dataX_MSB = i2cReadByteData(handle,0x01);
              dataX_LSB = i2cReadByteData(handle,0x02);
@@ -82,9 +82,9 @@ int getAngle()
              dataY = dataY_LSB + (dataY_MSB << 8);
              dataZ = dataZ_LSB + (dataZ_MSB << 8);
 
-             qDebug() << "X: " << dataX;
-             qDebug() << "Y: " << dataY;
-             qDebug() << "Z: " << dataZ;
+//             qDebug() << "X: " << dataX;
+//             qDebug() << "Y: " << dataY;
+//             qDebug() << "Z: " << dataZ;
 
              //Absolutwert und Wandlung in Double
              dataX_ABS = abs(dataX);
@@ -95,7 +95,7 @@ int getAngle()
 
              //Berechnung Winkel
              winkel = (atan(tangens))*180 / PI;
-             qDebug() << "atan: " << winkel;
+             //qDebug() << "atan: " << winkel;
 
              //Unterscheidung Quadrant
              if((dataZ >= 0) & (dataX >= 0))         // Rechts unten
@@ -107,20 +107,13 @@ int getAngle()
              else if((dataZ >= 0) & (dataX <= 0))    // Links unten
                  winkel = 360 - winkel ;
 
-             qDebug() << "Winkel: " << winkel;
+             //qDebug() << "Winkel: " << winkel;
              return winkel;
          }
 
          i2cClose(handle);
 
          gpioWrite(13,0);                    // MMA8491_EN = 0
-
-
-         qDebug() << "________________________________________";
-         gpioWrite(7,1);
-         gpioDelay(1000000);
-         gpioWrite(7,0);
-         gpioDelay(1000000);
          return 0;
 }
 

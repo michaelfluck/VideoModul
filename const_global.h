@@ -8,9 +8,6 @@
 
 #include <opencv2/core/core.hpp>
 
-
-
-
 const std::string pictureName               =       "images";
 const std::string pictureExtension          =       ".jpg";
 const std::string pictureSaveDestination    =       "/home/pi/Desktop/Testbilder/";
