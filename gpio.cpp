@@ -15,7 +15,7 @@ void gpioInit()
     gpioSetMode(16, PI_OUTPUT);
     gpioSetMode(20, PI_OUTPUT);
     gpioSetMode(21, PI_OUTPUT);
-    gpioWrite(7,1);
+    gpioWrite(7,1);                     //LED1 leuchtet immer
     gpioWrite(12,1);
     gpioWrite(16,1);
     gpioWrite(20,1);
@@ -139,7 +139,154 @@ void setLEDsOff()
     gpioWrite(25,0);
 }
 
-void setFuelGauge(int fuel)
+void setFuelGaugeLEDs()
 {
+    int c = getCharge();
+    //qDebug()<<c;
+    if(c >= 80)
+    {
+        gpioWrite(7,1);
+        gpioWrite(12,1);
+        gpioWrite(16,1);
+        gpioWrite(20,1);
+        gpioWrite(21,1);
+    }
+    else if(c >= 60 && c < 80)
+    {
+        gpioWrite(7,1);
+        gpioWrite(12,1);
+        gpioWrite(16,1);
+        gpioWrite(20,1);
+        gpioWrite(21,0);
+    }
+    else if(c >= 40 && c < 60)
+    {
+        gpioWrite(7,1);
+        gpioWrite(12,1);
+        gpioWrite(16,1);
+        gpioWrite(20,0);
+        gpioWrite(21,0);
+    }
+    else if(c >= 20 && c < 40)
+    {
+        gpioWrite(7,1);
+        gpioWrite(12,1);
+        gpioWrite(16,0);
+        gpioWrite(20,0);
+        gpioWrite(21,0);
+    }
+    else
+    {
+        gpioWrite(7,1);
+        gpioWrite(12,0);
+        gpioWrite(16,0);
+        gpioWrite(20,0);
+        gpioWrite(21,0);
+    }
+}
+
+//--------------------------------------------------------------------
+/* Initialisiert LTC2941
+    Vbat Alert   = [01]  = 2.8V
+    Prescaler M  = [111] = 128
+    AL/CC        = [00]  = pin AL/CC disabled
+    Shutdown     = [0]   = no Shutdown
+*/
+void initFuelGauge()
+{
+    int handle = 0;
+
+    handle = i2cOpen(1,0x64,0);
+
+    i2cWriteByteData(handle,0x01,0x78);
+
+    i2cClose(handle);
 
 }
+//-------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+// Liest Register 0x02 und 0x03 (MSB und LSB Accumulated Charge) von LTC2941 aus
+int getCharge()
+{
+    int handle = 0;
+
+    int charge_MSB = 0;
+    int charge_LSB = 0;
+    unsigned short int charge = 0;
+
+    double akkustand_double = 0;
+    double charge_double = 0;
+    int akkustand_int = 0;
+
+    i2cSwitchCombined(1);               // WICHTIG! Enable "Repeated Start"!!
+
+    handle = i2cOpen(1,0x64,0);
+
+    i2cWriteByte(handle,0x02);          // MSB Data
+
+    charge_MSB = i2cReadByteData(handle,0x02);
+    charge_LSB = i2cReadByteData(handle,0x03);
+
+    charge = charge_LSB + (charge_MSB << 8);
+
+    i2cClose(handle);
+
+     // Wertigkeit des LSB von Charge (in mAh)
+    // siehe Datenblatt LTC2941 Seite 10
+    // q_lsb = 0.425
+
+    // Akkukapazität verbaut = 9000mAh
+
+    // 9000 / 0.425 =  21176
+    // 2^16 - 21176 = 44359 = 0xAD48
+
+    // --> Charge = 0xFFFF --> Akkustand = 100%
+    // --> Charge = 0xAD48 --> Akkustand = 0%
+
+    charge_double = charge;
+    akkustand_double = ((charge_double - 44359.0) / 21176.0) * 100;
+    akkustand_int = akkustand_double;
+
+    return akkustand_int;
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+// Setzt Register 0x02 und 0x03 von LTC2941 auf 0xFFFF (voll aufgeladen)
+void setChargeFull()
+{
+    int handle = 0;
+
+    handle = i2cOpen(1,0x64,0);
+
+    i2cWriteByteData(handle,0x02,0xFF);
+    i2cWriteByteData(handle,0x03,0xFF);
+
+    i2cClose(handle);
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*   Prüft Status Register 0x00 auf Vbat Alert
+     Vbat Alert = 0 --> Akkuspannung unter 2.8V
+   Returnstatement: [0] = Spannung OK / [1] = Spannung unter 2.8V*/
+int emptyCheck()
+{
+    int handle = 0;
+    int StatusReg = 0;
+
+    i2cSwitchCombined(1);               // WICHTIG! Enable "Repeated Start"!!
+
+    handle = i2cOpen(1,0x64,0);
+    i2cWriteByte(handle,0x00);          // MSB Data
+    StatusReg = i2cReadByteData(handle,0x00);
+    i2cClose(handle);
+
+    if((StatusReg & 0x02) != 0)
+        return 1;
+    else
+        return 0;
+}
+//--------------------------------------------------------------------
+

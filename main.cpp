@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
                 case INIT:
                     qDebug() << "STATUS -> INITI";
                     gpioInit();
+                    initFuelGauge();
+                    setChargeFull(); //nur für Test der FuelGauge
                     s = WAIT;
                     break;
 
@@ -45,7 +47,7 @@ int main(int argc, char *argv[])
                         s = ENGAGE;
                     }else{
                         dataaq.quit();
-                        dataaq.wait(1000);
+                        dataaq.wait(2000);
                         qDebug() << "Film wird erstellt...";
                         dataaq.doVideo();
                         qDebug() << "Film FERTIG";
@@ -63,10 +65,11 @@ int main(int argc, char *argv[])
                     if((xmlreader.getStatus() == true) || (getVideoOnOff() == true))
                     {
                         s = ENGAGE;
-                    }else if(getOnOff() == true){
+                    }else if((getOnOff() == true) || (emptyCheck() == true)){
                         s = SHUTDOWN;
                     }else
                     {
+                        setFuelGaugeLEDs();
                         s = WAIT;
                     }
 

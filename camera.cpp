@@ -24,7 +24,7 @@ void Camera::getPicture()
 {
     setLEDsOn();
     cam_camera.open();
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 2; i++) {
         cam_camera.grab();
         cam_camera.retrieve(cam_picture);
     }
@@ -36,7 +36,7 @@ void Camera::getPicture()
     number << cam_pictureNr;
 
     //Bild drehen
-    cam_picture = turnPicture(cam_picture, getAngle());
+    //cam_picture = turnPicture(cam_picture, getAngle());
 
     // Set Savepath and Naming for the Pictures
     string name = pictureSaveDestination + pictureName + number.str() + pictureExtension;
@@ -49,8 +49,10 @@ void Camera::initCam()
     cam_camera.set(CV_CAP_PROP_FORMAT,CV_8UC3);
     cam_camera.set(CV_CAP_PROP_FRAME_HEIGHT,600);
     cam_camera.set(CV_CAP_PROP_FRAME_WIDTH,800);
-    //cam_camera.set(CV_CAP_PROP_EXPOSURE,100);
-    //cam_camera.set(CV_CAP_PROP_GAIN,50);
+    cam_camera.set(CV_CAP_PROP_EXPOSURE,-1); //Shutter on 33ms (Maximum)
+    //cam_camera.set(CV_CAP_PROP_GAIN,50); //ISO Wert
+    //cam_camera.set(CV_CAP_PROP_WHITE_BALANCE_RED_V, 50);
+    //cam_camera.set(CV_CAP_PROP_WHITE_BALANCE_BLUE_U, -1);
 }
 
 void Camera::setResolution(int resolution)
