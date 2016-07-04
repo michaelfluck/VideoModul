@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     picproc.cpp \
     dataaquisition.cpp \
     xmlreader.cpp \
-    gpio.cpp
+    gpio.cpp \
+    video.cpp
 
 HEADERS += \
     camera.h \
@@ -28,7 +29,8 @@ HEADERS += \
     const_global.h \
     dataaquisition.h \
     xmlreader.h \
-    gpio.h
+    gpio.h \
+    video.h
 
 INCLUDEPATH += /usr/include
 INCLUDEPATH += /usr/local/include

@@ -138,7 +138,7 @@ int xmlReader::getResolution()
 
 }
 
-double xmlReader::getFPS()
+std::string xmlReader::getFPS()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -183,7 +183,7 @@ double xmlReader::getFPS()
                                 }
                                 else if(reader.isStartElement())
                                 {
-                                    return reader.readElementText().toDouble();
+                                    return reader.readElementText().toAscii().constData();
                                     reader.readNext();
                                     break;
                                 }

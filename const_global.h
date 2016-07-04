@@ -24,7 +24,8 @@ enum States {
     INIT,
     ENGAGE,
     SHUTDOWN,
-    WAIT
+    WAIT,
+    VIDEO
 };
 
 #endif // CONST_GLOBAL_H

@@ -142,7 +142,6 @@ void setLEDsOff()
 void setFuelGaugeLEDs()
 {
     int c = getCharge();
-    //qDebug()<<c;
     if(c >= 80)
     {
         gpioWrite(7,1);

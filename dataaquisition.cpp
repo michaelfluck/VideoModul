@@ -29,9 +29,3 @@ void DataAquisition::doVideo()
     procPictures(cam.getPictureNr());
     cam.setPictureNrToZero();
 }
-
-void DataAquisition::setConfig(int resolution, double fps)
-{
-    cam.setResolution(resolution);
-    camSpeed = fps;
-}
