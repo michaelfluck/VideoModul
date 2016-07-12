@@ -63,8 +63,10 @@ int getAngle()
          i2cSwitchCombined(1);               // WICHTIG! Enable "Repeated Start"!!
 
          gpioWrite(13,1);                    // MMA8491_EN = 1
-         gpioDelay(1000);                   // Ton (minimales Delay)
+         gpioDelay(2000);                   // Ton (minimales Delay)
          handle = i2cOpen(1,0x55,0);
+
+         qDebug() << handle;
 
          i2cWriteByte(handle,0x00);
          dataready = i2cReadByte(handle);
@@ -81,10 +83,6 @@ int getAngle()
              dataX = dataX_LSB + (dataX_MSB << 8);
              dataY = dataY_LSB + (dataY_MSB << 8);
              dataZ = dataZ_LSB + (dataZ_MSB << 8);
-
-//             qDebug() << "X: " << dataX;
-//             qDebug() << "Y: " << dataY;
-//             qDebug() << "Z: " << dataZ;
 
              //Absolutwert und Wandlung in Double
              dataX_ABS = abs(dataX);
@@ -114,7 +112,7 @@ int getAngle()
          i2cClose(handle);
 
          gpioWrite(13,0);                    // MMA8491_EN = 0
-         return 0;
+         return 27;
 }
 
 int getOnOff()

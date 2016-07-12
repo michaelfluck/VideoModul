@@ -18,11 +18,11 @@ public:
     QString getStart();
     QString getZiel();
     QString getDatum();
+    std::string getOffsetBlende();
 private:
     QFile file;
     QXmlStreamReader reader;
     QString readElement;
-
 };
 
 #endif // XMLREADER_H

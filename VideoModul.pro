@@ -16,7 +16,6 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    camera.cpp \
     picproc.cpp \
     dataaquisition.cpp \
     xmlreader.cpp \
@@ -52,3 +51,19 @@ unix:!macx: LIBS += -L$$PWD/../../../../usr/local/lib/ -lpigpio
 
 INCLUDEPATH += $$PWD/../../../../usr/local/include
 DEPENDPATH += $$PWD/../../../../usr/local/include
+
+unix:!macx: LIBS += -L$$PWD/../../../../usr/local/lib/ -lopencv_imgproc
+
+INCLUDEPATH += $$PWD/../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../usr/local/include
+
+unix:!macx: LIBS += -L$$PWD/../../../../usr/local/lib/ -lopencv_core
+
+INCLUDEPATH += $$PWD/../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../usr/local/include
+
+unix:!macx: LIBS += -L$$PWD/../../../../usr/local/lib/ -lopencv_highgui
+
+INCLUDEPATH += $$PWD/../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../usr/local/include
+

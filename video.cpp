@@ -6,14 +6,15 @@ Video::Video()
 {
     qDebug() << "Video GO";
     videoStatus = false;
-    fps = "1";
-    speed = 10;
+    fps = "2";
     resolution = 800;
+    offsetBlende = "0";
 }
 
 Video::~Video()
 {
     qDebug() << "Video STOPP";
+    system("sudo pkill raspivid");
 }
 
 void Video::run()
@@ -21,25 +22,27 @@ void Video::run()
     if(videoStatus == false)
     {
         videoStatus = true;
+        QDir dir(rawVideoPath);
+        QString dirFile;
+        foreach(dirFile, dir.entryList())
+        {
+            dir.remove(dirFile);
+        }
         if(resolution == 1024)
         {
-            befehl = "raspivid -t 999999 -fps " + fps +" -o " + pictureSaveDestination + "video.h264 -w 1024 -h 786";
+            befehl = "raspivid -t 999999 -n -fps " + fps +" -o " + rawVideo + " -w 1024 -h 786 -awb flash -ev " + offsetBlende;
         }
         else if(resolution == 800)
         {
-            befehl = "raspivid -t 999999 -fps " + fps +" -o " + pictureSaveDestination + "video.h264 -w 800 -h 600";
+            befehl = "raspivid -t 999999 -n -fps " + fps +" -o " + rawVideo + " -w 800 -h 600 -awb flash -ev " + offsetBlende;
         }
         else
         {
-            befehl = "raspivid -t 999999 -fps " + fps +" -o " + pictureSaveDestination + "video.h264 -w 640 -h 480";
+            befehl = "raspivid -t 999999 -n -fps " + fps +" -o " + rawVideo + " -w 640 -h 480 -awb flash -ev " + offsetBlende;
         }
         system(befehl.c_str());
-    }
-    else
-    {
-        qDebug() << "Aufnahme läuft";
-    }
 
+    }
 }
 
 bool Video::getStatus()
@@ -50,17 +53,25 @@ bool Video::getStatus()
 void Video::stopVideo()
 {
         videoStatus = false;
-        system("pkill raspivid");
-        double cspeed = speed * (atof(fps.c_str()));
-        dateTime = QDateTime::currentDateTime();
-        ostringstream sspeed;
-        sspeed << cspeed;
-        befehl = "MP4Box -fps " + sspeed.str() + " -add " + pictureSaveDestination + "video.h264 /var/www/html/video/Aufnahme_" + (dateTime.toString("dd-MM-yyyy_hh:mm:ss")).toAscii().constData() + ".mp4";
+        system("sudo pkill raspivid");
+        if(fps == "2")
+        {
+            befehl = "MP4Box -fps 20 -add " + rawVideo + " " + prepVideo;
+        }
+        else if(fps == "10")
+        {
+            befehl = "MP4Box -fps 20 -add " + rawVideo + " " + prepVideo;
+        }
+        else
+        {
+            befehl = "MP4Box -fps 30 -add " + rawVideo + " " + prepVideo;
+        }
         system(befehl.c_str());
 }
 
-void Video::setConfig(string fps, int resolution)
+void Video::setConfig(string fps, int resolution, string offsetBlende)
 {
     this->fps = fps;
     this->resolution = resolution;
+    this->offsetBlende = offsetBlende;
 }

@@ -8,74 +8,76 @@ string start;
 string ziel;
 string datum;
 int aufloesung;
+int fps;
 
-int procPictures(int pictureNr)
+void procPictures(int angleArray[])
 {
-    Mat picture;
-    string src, dest;
-    VideoWriter outputVideo;
-    QDateTime dateTime = QDateTime::currentDateTime();
     readTextToAdd();
-    string filmname = videoPath + "Film " + (dateTime.toString("dd-MM-yyyy hh:mm")).toAscii().constData() + ".avi";
-
-    if(aufloesung == 1024)
+    std::string befehl = "sudo cp " + prepVideo + " " + releaseVideoPath + start + "-" + ziel + "-Preview.mp4";
+    system(befehl.c_str());
+    VideoCapture cap(prepVideo);
+    if(!cap.isOpened())
     {
-        outputVideo.open(filmname,CV_FOURCC_DEFAULT,1,Size(1024,768),true);
-    }
-    else if(aufloesung == 800)
-    {
-        outputVideo.open(filmname,CV_FOURCC_DEFAULT,1,Size(800,600),true);
-    }
-    else
-    {
-        outputVideo.open(filmname,CV_FOURCC_DEFAULT,1,Size(640,480),true);
+        qDebug() << "Fehler beim Oeffnen von prepVideo";
     }
 
-    for (int i = pictureNr - 1 ; i >= 0; i--)
-    {
-        ostringstream number;
-        number << i;
+    int frameCounter = cap.get(CV_CAP_PROP_FRAME_COUNT);
+    Mat frame;
+    fps = cap.get(CV_CAP_PROP_FPS);
 
-        //Bilder einlesen
-        src = pictureSaveDestination + pictureName + number.str() + pictureExtension;
-        picture = imread(src, CV_LOAD_IMAGE_COLOR);
+    for (int i = frameCounter-1 ; i >= 0 ; i--)
+    {
+        //cap.set(CV_CAP_PROP_POS_FRAMES, i);
+        qDebug() << "Frame: " << i;
+        cap >> frame;
+
+        qDebug() << "Drehung um: " << angleArray[i];
+        frame = turnPicture(frame, angleArray[i]);
 
         //Text hinzufügen
-        addText(picture);
+        frame = addText(frame);
 
-        //Video erstellen
-        outputVideo.write(picture);
+        ostringstream num;
 
-        //Bilder speichern
-        //dest =  pictureProcDestination + pictureName + number.str() + pictureExtension;
-        //imwrite(dest, picture);
+        if(i < 10)
+        {
+            num << "0";
+        }
+        if(i < 100)
+        {
+            num << "0";
+        }
+        if(i < 1000)
+        {
+            num << "0";
+        }
+        if(i < 10000)
+        {
+            num << "0";
+        }
+        if(i < 100000)
+        {
+            num << "0";
+        }
+        num << (i);
+        imwrite(pictureProcDestination + pictureName + num.str() + pictureExtension, frame);
     }
-    outputVideo.release();
-
-    // Alle Bilder löschen
-    QDir dir(pictureDestination);
-    foreach(QString dirFile, dir.entryList())
-    {
-        dir.remove(dirFile);
-    }
-    return 0;
-
 }
 
-Mat addText(Mat srcPicture)
+Mat addText(Mat frame)
 {    
-    Mat textedPicture;
-    Point orgTextLeft(10, 580);
-    Point orgTextMiddle(350, 580);
-    Point orgTextRight(600, 580);
-    Point orgDate(10, 25);
+    Point orgDate(10, 20);
+    Point orgTextLeft(10, 50);
+    Point orgTextMiddle(10, 80);
+    Point orgTextRight(10, 110);
+
 
     //Text einfügen
-    putText(srcPicture,"Benutzer: " + op ,orgTextLeft,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
-    putText(srcPicture,"Start: " + start,orgTextMiddle,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
-    putText(srcPicture,"Ziel: " + ziel,orgTextRight,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
-    putText(srcPicture,datum,orgDate,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
-    return textedPicture;
+    putText(frame,"Benutzer: " + op ,orgTextLeft,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
+    putText(frame,"Start: " + start,orgTextMiddle,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
+    putText(frame,"Ziel: " + ziel,orgTextRight,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
+    putText(frame,"Datum: " +datum,orgDate,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
+    return frame;
 }
 
 void readTextToAdd()
@@ -93,6 +95,23 @@ void readTextToAdd()
 
     //Videoauflösung setzen
     aufloesung = xmlreader.getResolution();
-
 }
 
+Mat turnPicture(Mat srcPicture, double angle)
+{
+    Mat turnedPicture;
+    Point2f pt(srcPicture.cols/2.,srcPicture.rows/2.);
+    Mat r = getRotationMatrix2D(pt, angle, 1);
+    warpAffine(srcPicture, turnedPicture, r, Size(srcPicture.cols, srcPicture.rows));
+
+    return turnedPicture;
+}
+
+void releaseVideo()
+{
+    ostringstream sfps;
+    sfps << fps;
+    std::string befehl = "/home/pi/bin/ffmpeg -i /home/pi/Desktop/Proc/img%06d.jpg -framerate " + sfps.str() + " -vcodec libx264 -crf 25 " + releaseVideoPath + start + "-" + ziel + ".mp4";
+    system(befehl.c_str());
+
+}

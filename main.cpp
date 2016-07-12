@@ -1,7 +1,4 @@
 #include <QCoreApplication>
-#include <QDebug>
-#include <iostream>
-#include <QString>
 #include <QtCore>
 
 #include "camera.h"
@@ -19,14 +16,11 @@ DataAquisition dataaq;
 xmlReader xmlreader;
 Video video;
 
-
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     cout << "VideoModul" << endl;
     States s = INIT;
-    QDir dir("/home/pi/Desktop/Testbilder");
-    QString dirFile;
 
     while(1){
         switch(s){
@@ -40,26 +34,39 @@ int main(int argc, char *argv[])
 
                 case ENGAGE:
                     //qDebug() << "STATUS -> ENGAGE";
+                    if(emptyCheck() == true)
+                    {
+                        setLEDsOff();
+                        video.stopVideo();
+                        dataaq.terminate();
+                        s = SHUTDOWN;
+                    }
+
                     if((xmlreader.getStatus() == true) || (getVideoOnOff() == true))
                     {
-                        if(video.getStatus() == true)
+                        if(video.getStatus() == false)
                         {
-                        }else
-                        {
-                            foreach(dirFile, dir.entryList())
-                            {
-                                dir.remove(dirFile);
-                            }
                             setLEDsOn();
-                            video.setConfig(xmlreader.getFPS(), xmlreader.getResolution());
-                            video.start(QThread::HighestPriority);
+                            video.setConfig(xmlreader.getFPS(), xmlreader.getResolution(), xmlreader.getOffsetBlende());
+                            dataaq.setConfig(xmlreader.getFPS());
+                            video.start(QThread::NormalPriority);
+                            dataaq.start(QThread::HighestPriority);
+
                         }
                         s = ENGAGE;
                     }else{
                         setLEDsOff();
                         video.stopVideo();
-                        s = WAIT;
+                        dataaq.terminate();
+                        s = PROCESSING;
                     }
+                    break;
+
+                case PROCESSING:
+                    qDebug() << "STATUS -> PROCESSING";
+                    procPictures(dataaq.angleArray);
+                    releaseVideo();
+                    s = WAIT;
                     break;
 
                 case SHUTDOWN:
@@ -80,10 +87,6 @@ int main(int argc, char *argv[])
                         s = WAIT;
                     }
 
-                    break;
-
-                default:
-                    qDebug() << "STATUS -> DEFAULT";
                     break;
         }
     }

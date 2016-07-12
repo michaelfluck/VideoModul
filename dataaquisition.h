@@ -3,9 +3,8 @@
 
 #include <QThread>
 #include <QDebug>
-#include "camera.h"
-#include "picproc.h"
 
+#include "gpio.h"
 
 class DataAquisition : public QThread
 {
@@ -13,12 +12,11 @@ public:
     DataAquisition();
     ~DataAquisition();
     void run();
-    bool getStatus();
-    void doVideo();
-    void setConfig(int resolution, double fps);
+    int angleArray[1000000];
+    void setConfig(std::string fps);
 private:
-    Camera cam;
-    double camSpeed;
+    std::string fps;
+
 };
 
 #endif // DATAAQUISITION_H

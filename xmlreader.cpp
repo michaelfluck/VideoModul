@@ -142,6 +142,7 @@ std::string xmlReader::getFPS()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
+    std::string fps;
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "Error at reading XML-File" + configXML;
@@ -183,7 +184,7 @@ std::string xmlReader::getFPS()
                                 }
                                 else if(reader.isStartElement())
                                 {
-                                    return reader.readElementText().toAscii().constData();
+                                    fps = reader.readElementText().toAscii().constData();
                                     reader.readNext();
                                     break;
                                 }
@@ -212,12 +213,14 @@ std::string xmlReader::getFPS()
         }
     }
     file.close();
+    return fps;
 }
 
 QString xmlReader::getOperator()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
+    QString op;
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "Error at reading XML-File" + configXML;
@@ -259,7 +262,7 @@ QString xmlReader::getOperator()
                                 }
                                 else if(reader.isStartElement())
                                 {
-                                    return reader.readElementText();
+                                    op = reader.readElementText();
                                     reader.readNext();
                                     break;
                                 }
@@ -288,12 +291,14 @@ QString xmlReader::getOperator()
         }
     }
     file.close();
+    return op;
 }
 
 QString xmlReader::getZiel()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
+    QString ziel;
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "Error at reading XML-File" + configXML;
@@ -335,7 +340,11 @@ QString xmlReader::getZiel()
                                 }
                                 else if(reader.isStartElement())
                                 {
-                                    return reader.readElementText();
+                                    ziel = reader.readElementText();
+                                    if(ziel == "")
+                                    {
+                                        ziel = "noData";
+                                    }
                                     reader.readNext();
                                     break;
                                 }
@@ -364,12 +373,14 @@ QString xmlReader::getZiel()
         }
     }
     file.close();
+    return ziel;
 }
 
 QString xmlReader::getStart()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
+    QString start;
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "Error at reading XML-File" + configXML;
@@ -411,7 +422,11 @@ QString xmlReader::getStart()
                                 }
                                 else if(reader.isStartElement())
                                 {
-                                    return reader.readElementText();
+                                    start = reader.readElementText();
+                                    if(start == "")
+                                    {
+                                        start = "noData";
+                                    }
                                     reader.readNext();
                                     break;
                                 }
@@ -440,12 +455,14 @@ QString xmlReader::getStart()
         }
     }
     file.close();
+    return start;
 }
 
 QString xmlReader::getDatum()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
+    QString datum;
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
         qDebug() << "Error at reading XML-File" + configXML;
@@ -487,7 +504,7 @@ QString xmlReader::getDatum()
                                 }
                                 else if(reader.isStartElement())
                                 {
-                                    return reader.readElementText();
+                                    datum = reader.readElementText();
                                     reader.readNext();
                                     break;
                                 }
@@ -516,4 +533,83 @@ QString xmlReader::getDatum()
         }
     }
     file.close();
+    return datum;
+}
+
+std::string xmlReader::getOffsetBlende()
+{
+    QXmlStreamReader reader;
+    QFile file(configXML);
+    std::string offsetBlende;
+    if(!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        qDebug() << "Error at reading XML-File" + configXML;
+    }
+
+    reader.setDevice(&file);
+    reader.readNext();
+    while(!reader.atEnd())
+    {
+        if(reader.isStartElement())
+        {
+            if(reader.name() == "Config")
+            {
+                reader.readNext();
+            }
+            else if(reader.name() == "Kanal")
+            {
+                while(!reader.atEnd())
+                {
+                    if(reader.isEndElement())
+                    {
+                        reader.readNext();
+                        break;
+                    }
+                    else if(reader.isCharacters())
+                    {
+                        reader.readNext();
+                    }
+                    else if(reader.isStartElement())
+                    {
+                        if(reader.name() == "Kanal")
+                        {
+                            while(!reader.atEnd())
+                            {
+                                if(reader.isEndElement())
+                                {
+                                    reader.readNext();
+                                    break;
+                                }
+                                else if(reader.isStartElement())
+                                {
+                                    offsetBlende = reader.readElementText().toAscii().constData();
+                                    reader.readNext();
+                                    break;
+                                }
+                                else if(reader.isCharacters())
+                                {
+                                    reader.readNext();
+                                }
+                                else
+                                {
+                                    reader.readNext();
+                                }
+                            }
+                        }
+                        reader.readNext();
+                    }
+                }
+            }
+            else
+            {
+                reader.readNext();
+            }
+        }
+        else
+        {
+            reader.readNext();
+        }
+    }
+    file.close();
+    return offsetBlende;
 }

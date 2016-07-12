@@ -10,8 +10,10 @@
 #include "xmlreader.h"
 #include "const_global.h"
 #include "gpio.h"
+#include "dataaquisition.h"
 
-int procPictures(int pictureNr);
+void procPictures(int aArray[]);
 void readTextToAdd();
+void releaseVideo();
 cv::Mat turnPicture(cv::Mat srcPicture, double angle);
-cv::Mat addText(cv::Mat srcPicture);
+cv::Mat addText(cv::Mat frame);

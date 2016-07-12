@@ -3,7 +3,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
+#include <opencv2/highgui/highgui.hpp>
 #include <raspicam/raspicam_cv.h>
 
 #include "const_global.h"
