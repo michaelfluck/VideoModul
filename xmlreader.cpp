@@ -1,3 +1,11 @@
+/*  --------------------------------------------------------------------------
+*   Title:      NTB Bachelorarbeit "VideoModul für ein Kanalreinigungssystem"
+*   Autor:      M.Fluck, S.Lutz
+*   Datum:      01.07.2016
+*   Version:    1.0
+*   Zweck:      Auslesen von XML-Files welche über das Webinterface 
+*               geschrieben werden.
+    --------------------------------------------------------------------------*/
 #include "xmlreader.h"
 
 xmlReader::xmlReader()
