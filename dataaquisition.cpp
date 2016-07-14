@@ -3,7 +3,10 @@
 DataAquisition::DataAquisition()
 {
     qDebug() << "DataAquisition GO";
-    fps = "10";
+    fps = "2";
+    i = 0;
+    std::fill_n(angleArray, 1000000, 0);
+
 }
 
 DataAquisition::~DataAquisition()
@@ -13,8 +16,6 @@ DataAquisition::~DataAquisition()
 
 void DataAquisition::run()
 {
-    long unsigned int i = 0;
-
     //Konstantendeklaration
      const int PI = 3.14159265359;
 
@@ -22,9 +23,11 @@ void DataAquisition::run()
      int handle = 0;
      int dataready = 0;
 
+     int winkel_old= 999;
 
     while(1)
     {
+
          int dataX_MSB = 0;
          int dataX_LSB = 0;
          int dataY_MSB = 0;
@@ -88,20 +91,35 @@ void DataAquisition::run()
              }
 
         i2cClose(handle);
-
         gpioWrite(13,0);                    // MMA8491_EN = 0
 
-
-        if (winkel < 6 || winkel > 355)
+        if (winkel < 3 || winkel > 357)
         {
             winkel = 0;
         }
+
+
+        //Filter gegen Stösse und Schläge
+        if(winkel_old != 999)
+
+                if(winkel > (winkel_old+10))
+                {
+                    winkel = (winkel_old+10);
+                }
+                else if(winkel < (winkel_old-10))
+                {
+                    winkel = (winkel_old-10);
+                }
+        else        // winkel_old beim ersten Durchgang setzen
+        {}
 
         if(fps == "2")
         {
             if(i%5 == 0)
             {
                 angleArray[(i/5)] = winkel;
+                //qDebug() << "Winkel gemessen: " << angleArray[i/5];
+
             }
         }
         else if(fps == "30")
@@ -114,12 +132,23 @@ void DataAquisition::run()
         {
             angleArray[i] = winkel;
         }
-        i++;  
-        msleep(100);
+        qDebug() << "winkel_old: " << winkel_old;
+        qDebug() << "winkel:     " << winkel;
+        winkel_old = winkel;
+        i++;
+        msleep(92);
+
+        //qDebug() << t.restart();
     }
 }
 
 void DataAquisition::setConfig(std::string fps)
 {
     this->fps = fps;
+}
+
+void DataAquisition::setReset()
+{
+    i = 0;
+    std::fill_n(angleArray, 1000000, 0);
 }

@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QDebug>
+#include <QElapsedTimer>
 
 #include "gpio.h"
 
@@ -14,9 +15,11 @@ public:
     void run();
     int angleArray[1000000];
     void setConfig(std::string fps);
+    void setReset();
 private:
     std::string fps;
-
+    long unsigned int i;
+        QElapsedTimer t;
 };
 
 #endif // DATAAQUISITION_H

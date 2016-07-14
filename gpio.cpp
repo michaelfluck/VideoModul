@@ -137,10 +137,9 @@ void setLEDsOff()
     gpioWrite(25,0);
 }
 
-void setFuelGaugeLEDs()
+void setFuelGaugeLEDs(int charge)
 {
-    int c = getCharge();
-    if(c >= 80)
+    if(charge >= 80)
     {
         gpioWrite(7,1);
         gpioWrite(12,1);
@@ -148,7 +147,7 @@ void setFuelGaugeLEDs()
         gpioWrite(20,1);
         gpioWrite(21,1);
     }
-    else if(c >= 60 && c < 80)
+    else if(charge >= 60 && charge < 80)
     {
         gpioWrite(7,1);
         gpioWrite(12,1);
@@ -156,7 +155,7 @@ void setFuelGaugeLEDs()
         gpioWrite(20,1);
         gpioWrite(21,0);
     }
-    else if(c >= 40 && c < 60)
+    else if(charge >= 40 && charge < 60)
     {
         gpioWrite(7,1);
         gpioWrite(12,1);
@@ -164,7 +163,7 @@ void setFuelGaugeLEDs()
         gpioWrite(20,0);
         gpioWrite(21,0);
     }
-    else if(c >= 20 && c < 40)
+    else if(charge >= 20 && charge < 40)
     {
         gpioWrite(7,1);
         gpioWrite(12,1);
@@ -172,7 +171,7 @@ void setFuelGaugeLEDs()
         gpioWrite(20,0);
         gpioWrite(21,0);
     }
-    else
+    else if(charge > 0 && charge < 20)
     {
         gpioWrite(7,1);
         gpioWrite(12,0);
@@ -180,6 +179,15 @@ void setFuelGaugeLEDs()
         gpioWrite(20,0);
         gpioWrite(21,0);
     }
+    else
+    {
+        gpioWrite(7,0);
+        gpioWrite(12,0);
+        gpioWrite(16,0);
+        gpioWrite(20,0);
+        gpioWrite(21,0);
+    }
+
 }
 
 //--------------------------------------------------------------------
@@ -245,6 +253,11 @@ int getCharge()
     akkustand_double = ((charge_double - 44359.0) / 21176.0) * 100;
     akkustand_int = akkustand_double;
 
+    if(akkustand_int < 0)
+    {
+        akkustand_int = 0;
+    }
+
     return akkustand_int;
 }
 //--------------------------------------------------------------------
@@ -259,6 +272,21 @@ void setChargeFull()
 
     i2cWriteByteData(handle,0x02,0xFF);
     i2cWriteByteData(handle,0x03,0xFF);
+
+    i2cClose(handle);
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+// Setzt Register 0x02 und 0x03 von LTC2941 auf 0xAD48 (Akku leer)
+void setChargeEmpty()
+{
+    int handle = 0;
+
+    handle = i2cOpen(1,0x64,0);
+
+    i2cWriteByteData(handle,0x02,0xAD);
+    i2cWriteByteData(handle,0x03,0x48);
 
     i2cClose(handle);
 }

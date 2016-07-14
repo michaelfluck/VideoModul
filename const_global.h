@@ -10,12 +10,9 @@
 
 const std::string pictureName               =       "img";
 const std::string pictureExtension          =       ".jpg";
-const std::string pictureSaveDestination    =       "/home/pi/Desktop/Testbilder/";
-const QString pictureDestination            =       "/home/pi/Desktop/Testbilder/";
-const std::string pictureProcDestination    =       "/home/pi/Desktop/Proc/";
-
 
 const QString rawVideoPath                  =       "/home/pi/Videos";
+const std::string rawVideoPathString        =       "/home/pi/Videos/";
 const std::string rawVideo                  =       "/home/pi/Videos/rawVideo.h264";
 const std::string prepVideo                 =       "/home/pi/Videos/prepVideo.mp4";
 const std::string procVideo                 =       "/home/pi/Videos/procVideo.avi";

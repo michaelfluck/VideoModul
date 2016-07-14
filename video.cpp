@@ -28,6 +28,7 @@ void Video::run()
         {
             dir.remove(dirFile);
         }
+
         if(resolution == 1024)
         {
             befehl = "raspivid -t 999999 -n -fps " + fps +" -o " + rawVideo + " -w 1024 -h 786 -awb flash -ev " + offsetBlende;

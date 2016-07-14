@@ -20,7 +20,9 @@ SOURCES += main.cpp \
     dataaquisition.cpp \
     xmlreader.cpp \
     gpio.cpp \
-    video.cpp
+    video.cpp \
+    fuelgauge.cpp \
+    ledproc.cpp
 
 HEADERS += \
     camera.h \
@@ -29,7 +31,9 @@ HEADERS += \
     dataaquisition.h \
     xmlreader.h \
     gpio.h \
-    video.h
+    video.h \
+    fuelgauge.h \
+    ledproc.h
 
 INCLUDEPATH += /usr/include
 INCLUDEPATH += /usr/local/include

@@ -8,6 +8,8 @@
 #include "const_global.h"
 #include "xmlreader.h"
 #include "video.h"
+#include "fuelgauge.h"
+#include "ledproc.h"
 
 using namespace std;
 
@@ -15,11 +17,13 @@ using namespace std;
 DataAquisition dataaq;
 xmlReader xmlreader;
 Video video;
+FuelGauge fuel;
+LEDProc procled;
+
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    cout << "VideoModul" << endl;
     States s = INIT;
 
     while(1){
@@ -28,7 +32,7 @@ int main(int argc, char *argv[])
                     qDebug() << "STATUS -> INITI";
                     gpioInit();
                     initFuelGauge();
-                    setChargeFull(); //nur für Test der FuelGauge
+                    fuel.start(QThread::LowPriority);
                     s = WAIT;
                     break;
 
@@ -58,6 +62,7 @@ int main(int argc, char *argv[])
                         setLEDsOff();
                         video.stopVideo();
                         dataaq.terminate();
+                        procled.start(QThread::LowPriority);
                         s = PROCESSING;
                     }
                     break;
@@ -66,11 +71,22 @@ int main(int argc, char *argv[])
                     qDebug() << "STATUS -> PROCESSING";
                     procPictures(dataaq.angleArray);
                     releaseVideo();
+                    procled.terminate();
+                    dataaq.setReset();
+                    setFuelGaugeLEDs(getCharge());
                     s = WAIT;
                     break;
 
                 case SHUTDOWN:
                     qDebug() << "STATUS -> SHUTDOWN";
+                    if(emptyCheck() == true)
+                    {
+                        setChargeEmpty();
+                        for (int i = 5; i >= 0; i--) {
+                            setFuelGaugeLEDs(i*20);
+                            gpioDelay(500000);
+                        }
+                    }
                     system("sudo shutdown now");
                     break;
 
@@ -79,14 +95,12 @@ int main(int argc, char *argv[])
                     if((xmlreader.getStatus() == true) || (getVideoOnOff() == true))
                     {
                         s = ENGAGE;
-                    }else if((getOnOff() == true) || (emptyCheck() == true)){
+                    }else if((getOnOff() == true) || (emptyCheck() == true)){   
                         s = SHUTDOWN;
                     }else
                     {
-                        setFuelGaugeLEDs();
                         s = WAIT;
                     }
-
                     break;
         }
     }

@@ -9,6 +9,7 @@ string ziel;
 string datum;
 int aufloesung;
 int fps;
+int angleFilter;
 
 void procPictures(int angleArray[])
 {
@@ -22,17 +23,27 @@ void procPictures(int angleArray[])
     }
 
     int frameCounter = cap.get(CV_CAP_PROP_FRAME_COUNT);
+    int arrayCounter = 0;
     Mat frame;
     fps = cap.get(CV_CAP_PROP_FPS);
 
     for (int i = frameCounter-1 ; i >= 0 ; i--)
     {
-        //cap.set(CV_CAP_PROP_POS_FRAMES, i);
-        qDebug() << "Frame: " << i;
-        cap >> frame;
 
-        qDebug() << "Drehung um: " << angleArray[i];
-        frame = turnPicture(frame, angleArray[i]);
+        //cap.set(CV_CAP_PROP_POS_FRAMES, i);
+        cap >> frame;
+        if(i > frameCounter-3 || i < 2)
+        {
+            angleFilter = angleArray[arrayCounter];
+        }
+        else
+        {
+            angleFilter = ((angleArray[arrayCounter-2] + angleArray[arrayCounter-1] + angleArray[arrayCounter] + angleArray[arrayCounter+1] + angleArray[arrayCounter+2])/5);
+        }
+        arrayCounter++;
+
+        qDebug() << angleFilter;
+        frame = turnPicture(frame, angleFilter);
 
         //Text hinzufügen
         frame = addText(frame);
@@ -60,7 +71,7 @@ void procPictures(int angleArray[])
             num << "0";
         }
         num << (i);
-        imwrite(pictureProcDestination + pictureName + num.str() + pictureExtension, frame);
+        imwrite(rawVideoPathString + pictureName + num.str() + pictureExtension, frame);
     }
 }
 
@@ -111,7 +122,8 @@ void releaseVideo()
 {
     ostringstream sfps;
     sfps << fps;
-    std::string befehl = "/home/pi/bin/ffmpeg -i /home/pi/Desktop/Proc/img%06d.jpg -framerate " + sfps.str() + " -vcodec libx264 -crf 25 " + releaseVideoPath + start + "-" + ziel + ".mp4";
+    std::string befehl = "/home/pi/bin/ffmpeg -i " + rawVideoPathString + pictureName + "%06d.jpg -framerate " + sfps.str() + " -vcodec libx264 -crf 25 " + rawVideoPathString + start + "-" + ziel + ".mp4";
     system(befehl.c_str());
-
+    befehl = "sudo mv " + rawVideoPathString + start + "-" + ziel + ".mp4 " + releaseVideoPath + start + "-" + ziel + ".mp4";
+    system(befehl.c_str());
 }
