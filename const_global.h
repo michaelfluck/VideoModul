@@ -22,6 +22,7 @@ const QString configXML                     =       "/var/www/html/config/config
 const QString onoffXML                      =       "/var/www/html/config/onoff.xml";
 
 const cv::Scalar textColor                  =       cv::Scalar(0,0,255);
+const int PI                                =       3.14159265359;
 
 enum States {
     INIT,

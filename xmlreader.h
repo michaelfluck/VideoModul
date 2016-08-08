@@ -14,12 +14,12 @@
 
 #include "const_global.h"
 
-class xmlReader
+class XMLReader
 {
 public:
     //Konstruktor & Dekonstruktor
-    xmlReader();
-    ~xmlReader();
+    XMLReader();
+    ~XMLReader();
     
     /*  bool getStatus
     *   Desc:       Status Videoaufnahme (WebInterface)

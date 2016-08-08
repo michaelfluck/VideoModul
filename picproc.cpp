@@ -78,22 +78,21 @@ void procPictures(int angleArray[])
 Mat addText(Mat frame)
 {    
     Point orgDate(10, 20);
-    Point orgTextLeft(10, 50);
-    Point orgTextMiddle(10, 80);
-    Point orgTextRight(10, 110);
-
+    Point orgOperator(10, 50);
+    Point orgStart(10, 80);
+    Point orgZiel(10, 110);
 
     //Text einfügen
-    putText(frame,"Benutzer: " + op ,orgTextLeft,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
-    putText(frame,"Start: " + start,orgTextMiddle,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
-    putText(frame,"Ziel: " + ziel,orgTextRight,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
-    putText(frame,"Datum: " +datum,orgDate,FONT_HERSHEY_SIMPLEX,0.8,textColor,2,8);
+    putText(frame,"Datum: " + datum, orgDate, FONT_HERSHEY_SIMPLEX, 0.8, textColor, 2, 8);
+    putText(frame,"Benutzer: " + op, orgOperator, FONT_HERSHEY_SIMPLEX, 0.8, textColor, 2, 8);
+    putText(frame,"Start: " + start, orgStart, FONT_HERSHEY_SIMPLEX, 0.8, textColor, 2, 8);
+    putText(frame,"Ziel: " + ziel, orgZiel, FONT_HERSHEY_SIMPLEX, 0.8, textColor, 2, 8);
     return frame;
 }
 
 void readTextToAdd()
 {
-    xmlReader xmlreader;
+    XMLReader xmlreader;
     //QStrings aus XML auslesen und umwandeln
     QString qoperator = xmlreader.getOperator();
     op = qoperator.toAscii().constData();
@@ -108,13 +107,12 @@ void readTextToAdd()
     aufloesung = xmlreader.getResolution();
 }
 
-Mat turnPicture(Mat srcPicture, double angle)
+Mat turnPicture(Mat frame, double angle)
 {
     Mat turnedPicture;
-    Point2f pt(srcPicture.cols/2.,srcPicture.rows/2.);
+    Point2f pt(frame.cols/2.,frame.rows/2.);
     Mat r = getRotationMatrix2D(pt, angle, 1);
-    warpAffine(srcPicture, turnedPicture, r, Size(srcPicture.cols, srcPicture.rows));
-
+    warpAffine(frame, turnedPicture, r, Size(frame.cols, frame.rows));
     return turnedPicture;
 }
 

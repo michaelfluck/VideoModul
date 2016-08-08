@@ -6,7 +6,6 @@ DataAquisition::DataAquisition()
     fps = "2";
     i = 0;
     std::fill_n(angleArray, 1000000, 0);
-
 }
 
 DataAquisition::~DataAquisition()
@@ -16,9 +15,6 @@ DataAquisition::~DataAquisition()
 
 void DataAquisition::run()
 {
-    //Konstantendeklaration
-     const int PI = 3.14159265359;
-
      //Variablendeklaration
      int handle = 0;
      int dataready = 0;
@@ -101,7 +97,7 @@ void DataAquisition::run()
 
         //Filter gegen Stösse und Schläge
         if(winkel_old != 999)
-
+        {
                 if(winkel > (winkel_old+10))
                 {
                     winkel = (winkel_old+10);
@@ -110,16 +106,13 @@ void DataAquisition::run()
                 {
                     winkel = (winkel_old-10);
                 }
-        else        // winkel_old beim ersten Durchgang setzen
-        {}
+        }
 
         if(fps == "2")
         {
             if(i%5 == 0)
             {
                 angleArray[(i/5)] = winkel;
-                //qDebug() << "Winkel gemessen: " << angleArray[i/5];
-
             }
         }
         else if(fps == "30")
@@ -132,13 +125,9 @@ void DataAquisition::run()
         {
             angleArray[i] = winkel;
         }
-        qDebug() << "winkel_old: " << winkel_old;
-        qDebug() << "winkel:     " << winkel;
         winkel_old = winkel;
         i++;
         msleep(92);
-
-        //qDebug() << t.restart();
     }
 }
 

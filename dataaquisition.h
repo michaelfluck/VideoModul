@@ -19,7 +19,6 @@ public:
 private:
     std::string fps;
     long unsigned int i;
-        QElapsedTimer t;
 };
 
 #endif // DATAAQUISITION_H

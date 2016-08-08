@@ -25,7 +25,6 @@ SOURCES += main.cpp \
     ledproc.cpp
 
 HEADERS += \
-    camera.h \
     picproc.h \
     const_global.h \
     dataaquisition.h \

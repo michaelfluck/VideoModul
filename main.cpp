@@ -1,7 +1,6 @@
 #include <QCoreApplication>
 #include <QtCore>
 
-#include "camera.h"
 #include "gpio.h"
 #include "dataaquisition.h"
 #include "picproc.h"
@@ -13,23 +12,22 @@
 
 using namespace std;
 
-
+// Erstellen aller benötigten Objekte
 DataAquisition dataaq;
-xmlReader xmlreader;
+XMLReader xmlreader;
 Video video;
 FuelGauge fuel;
 LEDProc procled;
-
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
     States s = INIT;
 
+    // Hauptschleife wird nie verlassen
     while(1){
         switch(s){
                 case INIT:
-                    qDebug() << "STATUS -> INITI";
                     gpioInit();
                     initFuelGauge();
                     fuel.start(QThread::LowPriority);
@@ -37,7 +35,7 @@ int main(int argc, char *argv[])
                     break;
 
                 case ENGAGE:
-                    //qDebug() << "STATUS -> ENGAGE";
+                    // Wenn die Akkuspannung kritisch ist, wird die Aufnahme beendet
                     if(emptyCheck() == true)
                     {
                         setLEDsOff();
@@ -45,9 +43,10 @@ int main(int argc, char *argv[])
                         dataaq.terminate();
                         s = SHUTDOWN;
                     }
-
+                    // Prüfen ob Aufnahme gestartet wurde (Magnetisch oder per Webinterface)
                     if((xmlreader.getStatus() == true) || (getVideoOnOff() == true))
                     {
+                        // Starten der Videoaufnahme
                         if(video.getStatus() == false)
                         {
                             setLEDsOn();
@@ -58,6 +57,7 @@ int main(int argc, char *argv[])
 
                         }
                         s = ENGAGE;
+                    // Beenden der Aufnahme und Starten der Verarbeitung
                     }else{
                         setLEDsOff();
                         video.stopVideo();
@@ -66,9 +66,8 @@ int main(int argc, char *argv[])
                         s = PROCESSING;
                     }
                     break;
-
+                // Verarbeitung der Video-Rohdaten
                 case PROCESSING:
-                    qDebug() << "STATUS -> PROCESSING";
                     procPictures(dataaq.angleArray);
                     releaseVideo();
                     procled.terminate();
@@ -76,9 +75,8 @@ int main(int argc, char *argv[])
                     setFuelGaugeLEDs(getCharge());
                     s = WAIT;
                     break;
-
+                // Abschalten des Systems mit LED-Blinksequenz
                 case SHUTDOWN:
-                    qDebug() << "STATUS -> SHUTDOWN";
                     if(emptyCheck() == true)
                     {
                         setChargeEmpty();
@@ -89,9 +87,8 @@ int main(int argc, char *argv[])
                     }
                     system("sudo shutdown now");
                     break;
-
+                // Warten auf Einsatz oder Abschalten bei kritischer Akkuspannung
                 case WAIT:
-                    //qDebug() << "STATUS -> WAIT";
                     if((xmlreader.getStatus() == true) || (getVideoOnOff() == true))
                     {
                         s = ENGAGE;

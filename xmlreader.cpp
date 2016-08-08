@@ -8,17 +8,17 @@
     --------------------------------------------------------------------------*/
 #include "xmlreader.h"
 
-xmlReader::xmlReader()
+XMLReader::XMLReader()
 {
     qDebug() << "XMLReader GO";
 }
 
-xmlReader::~xmlReader()
+XMLReader::~XMLReader()
 {
     qDebug() << "XMLReader STOPP";
 }
 
-bool xmlReader::getStatus()
+bool XMLReader::getStatus()
 {
     QXmlStreamReader reader;
     QFile file(onoffXML);
@@ -67,7 +67,7 @@ bool xmlReader::getStatus()
     return false;
 }
 
-int xmlReader::getResolution()
+int XMLReader::getResolution()
 {
     QXmlStreamReader reader;
     int resolutionW;
@@ -146,7 +146,7 @@ int xmlReader::getResolution()
 
 }
 
-std::string xmlReader::getFPS()
+std::string XMLReader::getFPS()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -224,7 +224,7 @@ std::string xmlReader::getFPS()
     return fps;
 }
 
-QString xmlReader::getOperator()
+QString XMLReader::getOperator()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -302,7 +302,7 @@ QString xmlReader::getOperator()
     return op;
 }
 
-QString xmlReader::getZiel()
+QString XMLReader::getZiel()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -384,7 +384,7 @@ QString xmlReader::getZiel()
     return ziel;
 }
 
-QString xmlReader::getStart()
+QString XMLReader::getStart()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -466,7 +466,7 @@ QString xmlReader::getStart()
     return start;
 }
 
-QString xmlReader::getDatum()
+QString XMLReader::getDatum()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
@@ -544,7 +544,7 @@ QString xmlReader::getDatum()
     return datum;
 }
 
-std::string xmlReader::getOffsetBlende()
+std::string XMLReader::getOffsetBlende()
 {
     QXmlStreamReader reader;
     QFile file(configXML);
